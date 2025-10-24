@@ -1,0 +1,339 @@
+<div class="nueva-venta-container">
+
+  <div class="venta-header">
+    <div class="venta-header-left">
+      <button class="btn btn-outline-secondary btn-volver" (click)="volverInicio()">
+        <i class="fas fa-arrow-left"></i> Volver al Inicio
+      </button>
+      <h2>NUEVA VENTA</h2>
+    </div>
+    <div class="acciones-venta">
+      <button class="btn btn-secondary" (click)="cancelarVenta()">
+        <i class="fas fa-times"></i> Cancelar Venta
+      </button>
+    </div>
+  </div>
+
+
+  <div class="busqueda-producto card">
+    <div class="card-header">
+      <h4>Agregar Productos</h4>
+    </div>
+    <div class="card-body">
+      <div class="busqueda-controls">
+
+        <div class="combo-productos">
+          <input 
+            type="text" 
+            placeholder="Buscar producto por código, nombre..." 
+            [(ngModel)]="terminoBusqueda"
+            (input)="filtrarProductos()"
+            (keyup.enter)="agregarProductoSeleccionado()"
+            class="busqueda-input"
+            #busquedaInput
+          >
+          
+          <div class="lista-productos" *ngIf="terminoBusqueda && productosFiltrados.length > 0">
+            <div 
+              *ngFor="let producto of productosFiltrados" 
+              class="item-producto"
+              (click)="seleccionarProducto(producto)"
+              [class.seleccionado]="productoSeleccionado?.idProducto === producto.idProducto"
+            >
+              <div class="producto-info">
+                <strong>{{ producto.codigo }}</strong> - {{ producto.nombre }}
+              </div>
+              <div class="producto-precio">
+                $ {{ producto.precioVenta | number:'1.2-2' }}
+                <span *ngIf="producto.estado?.id_estado !== 1" class="badge badge-danger">INACTIVO</span>
+              </div>
+            </div>
+          </div>
+          
+          <div *ngIf="terminoBusqueda && productosFiltrados.length === 0" class="no-resultados">
+            No se encontraron productos
+          </div>
+        </div>
+
+        <div class="cantidad-control">
+          <label>Cantidad:</label>
+          <input 
+            type="number" 
+            [(ngModel)]="cantidadSeleccionada" 
+            min="1" 
+            class="cantidad-input"
+            value="1"
+          >
+        </div>
+        
+        <div class="botones-agregar">
+          <button class="btn btn-primary" (click)="agregarProductoSeleccionado()">
+            <i class="fas fa-plus"></i> Agregar
+          </button>
+          <button class="btn btn-outline-secondary" (click)="limpiarBusqueda()">
+            <i class="fas fa-times"></i> Limpiar
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="productoSeleccionado" class="producto-seleccionado alert alert-info mt-2">
+        <strong>Producto seleccionado:</strong> 
+        {{ productoSeleccionado.codigo }} - {{ productoSeleccionado.nombre }} 
+        - $ {{ productoSeleccionado.precioVenta | number:'1.2-2' }}
+      </div>
+    </div>
+  </div>
+
+  <div class="venta-body">
+   
+    <div class="ticket-venta card">
+      <div class="card-header">
+        <h4>Ticket de Venta</h4>
+        <span class="badge badge-info">{{venta.items.length}} productos</span>
+      </div>
+      <div class="card-body">
+        <div class="items-venta">
+          <table class="table table-striped table-hover">
+            <thead class="thead-dark">
+              <tr>
+                <th width="40">#</th>
+                <th>Producto</th>
+                <th width="100">Cantidad</th>
+                <th width="120">P. Unitario</th>
+                <th width="120">Subtotal</th>
+                <th width="60">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of venta.items; let i = index" class="item-row">
+                <td class="text-center">{{ i + 1 }}</td>
+                <td>
+                  <strong>{{ item.producto.nombre }}</strong>
+                  <br>
+                  <small class="text-muted">Código: {{ item.producto.codigo }}</small>
+                </td>
+                <td>
+                  <input 
+                    type="number" 
+                    [(ngModel)]="item.cantidad" 
+                    min="1" 
+                    (change)="actualizarCantidad(item)"
+                    class="form-control cantidad-item"
+                  >
+                </td>
+                <td class="text-right">$ {{ item.precioUnitario | number:'1.2-2' }}</td>
+                <td class="text-right">$ {{ item.subtotal | number:'1.2-2' }}</td>
+                <td class="text-center">
+                  <button class="btn btn-danger btn-sm" (click)="eliminarItem(i)" title="Eliminar">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div *ngIf="!venta.items.length" class="no-items alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            No hay productos
+          </div>
+        </div>
+
+    
+        <div class="totales card mt-3">
+          <div class="card-body">
+            <div class="total-line">
+              <span>Subtotal:</span>
+              <span class="valor">$ {{ venta.subtotal | number:'1.2-2' }}</span>
+            </div>
+            <div class="total-line">
+              <span>Descuento:</span>
+              <span class="valor">- $ {{ venta.descuento | number:'1.2-2' }}</span>
+            </div>
+            <div class="total-line total-final">
+              <strong>TOTAL:</strong>
+              <strong class="valor-total">$ {{ venta.total | number:'1.2-2' }}</strong>
+            </div>
+          </div>
+        </div>
+
+        <button 
+          class="btn-finalizar btn btn-success btn-lg btn-block mt-3" 
+          (click)="finalizarVenta()"
+          [disabled]="!venta.items.length || !venta.cliente"
+          [class.disabled]="!venta.items.length || !venta.cliente"
+        >
+          <i class="fas fa-check-circle"></i>
+          FINALIZAR VENTA
+        </button>
+      </div>
+    </div>
+
+
+    <div class="panel-derecho">
+  
+      <div class="cliente-section card">
+        <div class="card-header">
+          <h4>Datos del Cliente</h4>
+        </div>
+        <div class="card-body">
+          <div class="busqueda-cliente">
+            <div class="input-group mb-2">
+              <input 
+                type="text" 
+                placeholder="Buscar por nombre, apellido o NIT..." 
+                [(ngModel)]="clienteBusqueda"
+                class="form-control"
+                (keyup.enter)="buscarCliente()"
+              >
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" (click)="buscarCliente()" type="button">
+                  <i class="fas fa-search"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div *ngIf="venta.cliente" class="cliente-info alert alert-success">
+            <h6><i class="fas fa-user"></i> Cliente Seleccionado:</h6>
+            <p><strong>Nombre:</strong> {{ venta.cliente.nombre }} {{ venta.cliente.apellido }}</p>
+            <p><strong>NIT:</strong> {{ venta.cliente.nit }}</p>
+            <p><strong>Teléfono:</strong> {{ venta.cliente.telefono }}</p>
+            <p *ngIf="venta.cliente.email"><strong>Email:</strong> {{ venta.cliente.email }}</p>
+          </div>
+          
+          <button class="btn btn-outline-primary btn-block" (click)="crearClienteRapido()">
+            <i class="fas fa-user-plus"></i> Nuevo Cliente
+          </button>
+        </div>
+      </div>
+
+      <div class="pago-section card mt-3">
+        <div class="card-header">
+          <h4>Método de Pago</h4>
+        </div>
+        <div class="card-body">
+          <div class="metodo-pago-options">
+            <div class="form-check" *ngFor="let metodo of metodosPago">
+              <input 
+                class="form-check-input" 
+                type="radio" 
+                name="metodoPago" 
+                [id]="'metodo_' + metodo.idMetodo"
+                [value]="metodo.nombre.toUpperCase()" 
+                [(ngModel)]="venta.metodoPago"
+                (change)="calcularCambio()"
+              >
+              <label class="form-check-label" [for]="'metodo_' + metodo.idMetodo">
+                {{ metodo.nombre }}
+                <small *ngIf="metodo.requiereReferencia === 'S'" class="text-muted">(Requiere referencia)</small>
+              </label>
+            </div>
+          </div>
+
+          <div *ngIf="venta.metodoPago === 'EFECTIVO'" class="pago-campos mt-3">
+            <div class="form-group">
+              <label>Monto Recibido:</label>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">$</span>
+                </div>
+                <input 
+                  type="number" 
+                  [(ngModel)]="montoRecibido"
+                  (input)="calcularCambio()"
+                  class="form-control"
+                  placeholder="0.00"
+                  min="0"
+                  step="0.01"
+                  (keyup.enter)="finalizarVenta()"
+                >
+              </div>
+            </div>
+            <div *ngIf="cambio >= 0" class="cambio alert" 
+                 [class.alert-success]="cambio >= 0" 
+                 [class.alert-danger]="cambio < 0">
+              <strong>
+                <i class="fas fa-exchange-alt"></i>
+                Cambio: $ {{ cambio | number:'1.2-2' }}
+              </strong>
+            </div>
+            <div *ngIf="cambio < 0" class="alert alert-warning mt-2">
+              <i class="fas fa-exclamation-triangle"></i>
+              El monto recibido es insuficiente
+            </div>
+          </div>
+
+          <div *ngIf="venta.metodoPago !== 'EFECTIVO'" class="pago-campos mt-3">
+            <div class="form-group">
+              <label>Referencia de Pago:</label>
+              <input 
+                type="text" 
+                class="form-control"
+                placeholder="Se generará automáticamente"
+                readonly
+              >
+              <small class="form-text text-muted">
+                Esta referencia se generará automáticamente al finalizar la venta
+              </small>
+            </div>
+          </div>
+
+          <div *ngIf="!venta.cliente && venta.items.length > 0" class="alert alert-warning mt-3">
+            <i class="fas fa-exclamation-circle"></i>
+            Debes seleccionar un cliente para finalizar la venta
+          </div>
+
+          <div *ngIf="venta.items.length === 0" class="alert alert-warning mt-3">
+            <i class="fas fa-exclamation-circle"></i>
+            Agrega productos al ticket para continuar
+          </div>
+        </div>
+      </div>
+
+      <div class="resumen-venta card mt-3">
+        <div class="card-header">
+          <h4>Resumen</h4>
+        </div>
+        <div class="card-body">
+          <div class="resumen-item">
+            <span>Productos:</span>
+            <span>{{ venta.items.length }}</span>
+          </div>
+          <div class="resumen-item">
+            <span>Cliente:</span>
+            <span>{{ venta.cliente ? (venta.cliente.nombre + ' ' + venta.cliente.apellido) : 'No seleccionado' }}</span>
+          </div>
+          <div class="resumen-item">
+            <span>Método Pago:</span>
+            <span>{{ venta.metodoPago }}</span>
+          </div>
+          <div class="resumen-item total">
+            <strong>Total a Pagar:</strong>
+            <strong>$ {{ venta.total | number:'1.2-2' }}</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Información del Vendedor -->
+      <div class="vendedor-info card mt-3">
+        <div class="card-header">
+          <h4>Información del Vendedor</h4>
+        </div>
+        <div class="card-body">
+          <div class="resumen-item">
+            <span>Vendedor:</span>
+            <span>{{ usuarioLogueado?.nombre || 'Usuario Actual' }}</span>
+          </div>
+          <div class="resumen-item">
+            <span>Sucursal:</span>
+            <span>{{ sucursalActual.nombre || 'Sucursal Central' }}</span>
+          </div>
+          <div class="resumen-item">
+            <span>Fecha:</span>
+            <span>{{ today | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

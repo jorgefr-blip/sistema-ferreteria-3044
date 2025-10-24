@@ -1,0 +1,166 @@
+<!-- src/app/components/top-clientes-component/top-clientes-component.html -->
+<div class="container mt-4">
+  <div class="card">
+    <!-- HEADER -->
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+      <h3 class="mb-0">Top 10 Clientes - Reporte Gerencial</h3>
+      <button class="btn btn-light btn-sm" (click)="exportarAExcel()">
+         Exportar Excel
+      </button>
+    </div>
+
+    <div class="card-body">
+      <!-- ESTADÍSTICAS RÁPIDAS -->
+      <div class="row mb-4" *ngIf="estadisticas.totalClientes">
+        <div class="col-md-3">
+          <div class="card text-white bg-success">
+            <div class="card-body text-center">
+              <h5>Total Clientes</h5>
+              <h2>{{estadisticas.totalClientes}}</h2>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card text-white bg-info">
+            <div class="card-body text-center">
+              <h5>Cliente Top</h5>
+              <h6>{{estadisticas.clienteTop}}</h6>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card text-white bg-warning">
+            <div class="card-body text-center">
+              <h5>Gasto Máximo</h5>
+              <h6>{{formatearMoneda(estadisticas.gastoMaximo)}}</h6>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card text-white bg-secondary">
+            <div class="card-body text-center">
+              <h5>Sucursal Top</h5>
+              <h6>{{estadisticas.sucursalTop}}</h6>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FILTROS -->
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <label class="form-label">Filtrar por Sucursal:</label>
+          <select class="form-select" [(ngModel)]="filtroSucursal" (change)="aplicarFiltros()">
+            <option [value]="null">Todas las sucursales</option>
+            <option [value]="1">Sucursal Central</option>
+            <option [value]="2">Sucursal Norte</option>
+            <option [value]="3">Sucursal Sur</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Filtrar por Zona:</label>
+          <select class="form-select" [(ngModel)]="filtroZona" (change)="aplicarFiltros()">
+            <option value="">Todas las zonas</option>
+            <option value="Zona Central">Zona Central</option>
+            <option value="Zona Norte">Zona Norte</option>
+            <option value="Zona Sur">Zona Sur</option>
+          </select>
+        </div>
+        <div class="col-md-4 d-flex align-items-end gap-2">
+          <button class="btn btn-outline-secondary" (click)="limpiarFiltros()">
+             Limpiar
+          </button>
+          <button class="btn btn-success" (click)="cargarTop10Clientes()">
+             Actualizar
+          </button>
+        </div>
+      </div>
+
+      <!-- LOADING -->
+      <div *ngIf="loading" class="text-center py-4">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-2">Cargando reporte de clientes...</p>
+      </div>
+
+      <!-- ERROR -->
+      <div *ngIf="error && !loading" class="alert alert-danger alert-dismissible">
+        {{error}}
+        <button type="button" class="btn-close" (click)="error = ''"></button>
+      </div>
+
+      <!-- TABLA DE CLIENTES -->
+      <div *ngIf="!loading && !error" class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th>Pos</th>
+              <th>Cliente</th>
+              <th>Contacto</th>
+              <th>Sucursal</th>
+              <th>Zona</th>
+              <th>Compras</th>
+              <th>Total Gastado</th>
+              <th>Promedio</th>
+              <th>% Sucursal</th>
+              <th>Última Compra</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let cliente of topClientes; let i = index" 
+                [class.table-warning]="i === 0"
+                [class.table-info]="i === 1"
+                [class.table-success]="i === 2">
+              
+              <td class="text-center">
+                <strong>{{getIconoPosicion(i)}}</strong>
+              </td>
+              
+              <td>
+                <strong>{{cliente.clienteCompleto}}</strong>
+                <br>
+                <small class="text-muted">NIT: {{cliente.nit}}</small>
+              </td>
+              
+              <td>
+                <small>
+                  {{cliente.telefono}}<br>
+                   {{cliente.email}}
+                </small>
+              </td>
+              
+              <td>{{cliente.nombreSucursal}}</td>
+              
+              <td>
+                <span class="badge bg-secondary">{{cliente.zona}}</span>
+              </td>
+              
+              <td class="text-center">
+                <span class="badge bg-primary">{{cliente.totalCompras}}</span>
+              </td>
+              
+              <td class="text-end">
+                <strong class="text-success">{{formatearMoneda(cliente.totalGastado)}}</strong>
+              </td>
+              
+              <td class="text-end">{{formatearMoneda(cliente.promedioCompra)}}</td>
+              
+              <td class="text-center">
+                <span class="badge" [class]="getColorPorcentaje(cliente.porcentajeSucursal)">
+                  {{formatearPorcentaje(cliente.porcentajeSucursal)}}
+                </span>
+              </td>
+              
+              <td>{{formatearFecha(cliente.ultimaCompra)}}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div *ngIf="topClientes.length === 0" class="text-center py-4">
+          <p class="text-muted">No se encontraron clientes con los filtros aplicados</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

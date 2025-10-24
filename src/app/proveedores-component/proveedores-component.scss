@@ -1,0 +1,47 @@
+/* proveedores-component.scss */
+:host {
+  display: block;
+}
+
+.proveedor-avatar {
+  width: 40px;
+  height: 40px;
+  font-size: 0.9rem;
+}
+
+.empty-state {
+  padding: 3rem 1rem;
+}
+
+.badge {
+  font-size: 0.75rem;
+  padding: 0.35em 0.65em;
+  
+  &.bg-success {
+    background-color: #198754 !important;
+  }
+  
+  &.bg-secondary {
+    background-color: #6c757d !important;
+  }
+  
+  &.bg-warning {
+    background-color: #ffc107 !important;
+    color: #000;
+  }
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.btn-group-sm .btn {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

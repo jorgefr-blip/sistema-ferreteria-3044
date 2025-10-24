@@ -1,0 +1,256 @@
+<div class="container-fluid py-4">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="h3 mb-1 text-primary fw-bold">Gestión de Facturas</h1>
+      <p class="text-muted mb-0">Consulta y administra las facturas del sistema</p>
+    </div>
+    <div class="d-flex gap-2">
+      <button class="btn btn-outline-secondary d-flex align-items-center" (click)="volverInicio()">
+        <i class="fas fa-home me-2"></i>Inicio
+      </button>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="card shadow-sm mb-4 border-0">
+    <div class="card-header bg-light py-3">
+      <h6 class="card-title mb-0 fw-semibold">
+        <i class="fas fa-filter me-2 text-primary"></i>Filtros de Búsqueda
+      </h6>
+    </div>
+    <div class="card-body p-4">
+      <div class="row g-3">
+        <div class="col-md-3">
+          <label class="form-label fw-medium">Número de Factura</label>
+          <input type="text" class="form-control shadow-sm" [(ngModel)]="filtroNumero" 
+                 placeholder="Buscar por número...">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label fw-medium">Cliente</label>
+          <input type="text" class="form-control shadow-sm" [(ngModel)]="filtroCliente" 
+                 placeholder="Buscar por cliente...">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label fw-medium">Estado</label>
+          <select class="form-select shadow-sm" [(ngModel)]="filtroEstado">
+            <option value="">Todos los estados</option>
+            <option *ngFor="let estado of estados" [value]="estado.id_estado">
+              {{ estado.nombre }}
+            </option>
+  </select>
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+          <button class="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center" (click)="limpiarFiltros()">
+            <i class="fas fa-eraser me-2"></i>Limpiar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lista de Facturas -->
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-light py-3 d-flex justify-content-between align-items-center">
+      <h5 class="card-title mb-0 fw-semibold">
+        <i class="fas fa-file-invoice me-2 text-primary"></i>Lista de Facturas
+        <span class="badge bg-primary ms-2 rounded-pill">{{ facturasFiltradas.length }}</span>
+      </h5>
+      <button class="btn btn-outline-primary btn-sm d-flex align-items-center" (click)="buscarFacturas()">
+        <i class="fas fa-sync-alt me-1"></i>Actualizar
+      </button>
+    </div>
+    <div class="card-body p-0">
+      <!-- Loading -->
+      <div *ngIf="loading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando facturas...</span>
+        </div>
+        <p class="mt-3 text-muted">Cargando facturas...</p>
+      </div>
+
+      <!-- Sin datos -->
+      <div *ngIf="!loading && facturasFiltradas.length === 0" class="text-center py-5">
+        <i class="fas fa-file-invoice fa-3x text-muted mb-3 opacity-50"></i>
+        <p class="text-muted mb-2">No hay facturas registradas</p>
+        <p class="text-muted small" *ngIf="filtroNumero || filtroCliente || filtroEstado">
+          No se encontraron facturas con los filtros aplicados
+        </p>
+      </div>
+
+      <!-- Tabla de facturas -->
+      <div *ngIf="!loading && facturasFiltradas.length > 0" class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th class="ps-4">Número</th>
+              <th>Cliente</th>
+              <th>Vendedor</th>
+              <th>Sucursal</th>
+              <th>Fecha</th>
+              <th>Total</th>
+              <th>Estado</th>
+              <th class="text-center pe-4">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let factura of facturasFiltradas" class="align-middle">
+              <td class="ps-4">
+                <strong class="text-primary">{{ factura.numero }}</strong>
+              </td>
+              <td>
+                <div>
+                  <strong>{{ getNombreCliente(factura) }}</strong>
+                  <div *ngIf="factura.cliente?.nit" class="text-muted small">
+                    NIT: {{ factura.cliente.nit }}
+                  </div>
+                </div>
+              </td>
+              <td>{{ factura.vendedor?.nombre }}</td>
+              <td>
+                <span class="badge bg-light text-dark border">{{ factura.sucursal?.nombre }}</span>
+              </td>
+              <td>{{ formatearFecha(factura.fecha) }}</td>
+              <td>
+                <span class="fw-bold text-success">{{ formatearMoneda(factura.total) }}</span>
+              </td>
+              <td>
+                <span [class]="getEstadoClase(factura.estado)" class="badge">
+                  {{ getEstadoTexto(factura.estado) }}
+                </span>
+              </td>
+              <td class="text-center pe-4">
+                <div class="btn-group btn-group-sm">
+                  <button class="btn btn-outline-primary d-flex align-items-center" (click)="verDetalles(factura)" 
+                          title="Ver detalles">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                  <button class="btn btn-outline-danger d-flex align-items-center" (click)="eliminarFactura(factura.idFactura)"
+                          title="Eliminar factura">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Detalles -->
+  <div *ngIf="modoEdicion && facturaEditando" class="modal fade show d-block" 
+       style="background-color: rgba(0,0,0,0.5)" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content shadow-lg border-0">
+        <div class="modal-header bg-primary text-white py-3">
+          <h5 class="modal-title fw-semibold">
+            <i class="fas fa-info-circle me-2"></i>Detalles de Factura #{{ facturaEditando.numero }}
+          </h5>
+          <button type="button" class="btn-close btn-close-white" (click)="cancelarEdicion()"></button>
+        </div>
+        <div class="modal-body p-4">
+          <!-- Información básica de la factura -->
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <div class="card h-100 border-0 shadow-sm">
+                <div class="card-header bg-light py-2">
+                  <h6 class="mb-0 fw-semibold">Información del Cliente</h6>
+                </div>
+                <div class="card-body">
+                  <div class="mb-2">
+                    <strong>Cliente:</strong> {{ getNombreCliente(facturaEditando) }}
+                  </div>
+                  <div class="mb-2" *ngIf="facturaEditando.cliente?.nit">
+                    <strong>NIT:</strong> {{ facturaEditando.cliente.nit }}
+                  </div>
+                  <div class="mb-2" *ngIf="facturaEditando.cliente?.telefono">
+                    <strong>Teléfono:</strong> {{ facturaEditando.cliente.telefono }}
+                  </div>
+                  <div class="mb-2" *ngIf="facturaEditando.cliente?.email">
+                    <strong>Email:</strong> {{ facturaEditando.cliente.email }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card h-100 border-0 shadow-sm">
+                <div class="card-header bg-light py-2">
+                  <h6 class="mb-0 fw-semibold">Información de la Factura</h6>
+                </div>
+                <div class="card-body">
+                  <div class="mb-2">
+                    <strong>Vendedor:</strong> {{ facturaEditando.vendedor?.nombre }}
+                  </div>
+                  <div class="mb-2">
+                    <strong>Sucursal:</strong> {{ facturaEditando.sucursal?.nombre }}
+                  </div>
+                  <div class="mb-2">
+                    <strong>Fecha:</strong> {{ formatearFecha(facturaEditando.fecha) }}
+                  </div>
+                  <div class="mb-2">
+                    <strong>Estado:</strong> 
+                    <span [class]="getEstadoClase(facturaEditando.estado)" class="badge ms-1">
+                      {{ getEstadoTexto(facturaEditando.estado) }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Detalles de productos -->
+          <div *ngIf="detallesFacturaEditando.length > 0">
+            <div class="card border-0 shadow-sm">
+              <div class="card-header bg-light py-2">
+                <h6 class="mb-0 fw-semibold">Productos Facturados</h6>
+              </div>
+              <div class="card-body p-0">
+                <div class="table-responsive">
+                  <table class="table table-sm mb-0">
+                    <thead class="table-light">
+                      <tr>
+                        <th class="ps-4">Producto</th>
+                        <th>Código</th>
+                        <th>Categoría</th>
+                        <th class="text-center">Cantidad</th>
+                        <th class="text-end">Precio Unitario</th>
+                        <th class="text-end pe-4">Subtotal</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let detalle of detallesFacturaEditando">
+                        <td class="ps-4">{{ detalle.producto?.nombre }}</td>
+                        <td>{{ detalle.producto?.codigo }}</td>
+                        <td>{{ detalle.producto?.categoria?.nombre }}</td>
+                        <td class="text-center">{{ detalle.cantidad }}</td>
+                        <td class="text-end">{{ formatearMoneda(detalle.precioUnitario) }}</td>
+                        <td class="text-end pe-4">{{ formatearMoneda(detalle.subtotal) }}</td>
+                      </tr>
+                    </tbody>
+                    <tfoot class="table-primary">
+                      <tr>
+                        <td colspan="5" class="text-end fw-bold ps-4">Total Factura:</td>
+                        <td class="text-end fw-bold pe-4">{{ formatearMoneda(facturaEditando.total) }}</td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="detallesFacturaEditando.length === 0" class="text-center py-5">
+            <i class="fas fa-box-open fa-2x text-muted mb-2 opacity-50"></i>
+            <p class="text-muted mb-0">No hay detalles de productos para esta factura</p>
+          </div>
+        </div>
+        <div class="modal-footer py-3">
+          <button type="button" class="btn btn-secondary d-flex align-items-center" (click)="cancelarEdicion()">
+            <i class="fas fa-times me-2"></i>Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

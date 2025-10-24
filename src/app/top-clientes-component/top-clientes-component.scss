@@ -1,0 +1,22 @@
+// Agrega esto al archivo existente
+.top-clientes-special {
+  .cliente-destacado {
+    border-left: 4px solid #f39c12;
+    background: linear-gradient(135deg, #fffaf0 0%, #fef9e7 100%);
+  }
+  
+  .medalla-oro {
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    color: #000;
+  }
+  
+  .medalla-plata {
+    background: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%);
+    color: #000;
+  }
+  
+  .medalla-bronce {
+    background: linear-gradient(135deg, #cd7f32 0%, #e3964a 100%);
+    color: #000;
+  }
+}

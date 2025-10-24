@@ -1,0 +1,238 @@
+<div class="lista-clientes-container">
+  <div class="header-clientes">
+    <div class="d-flex justify-content-between align-items-center">
+      <h2>
+        <i class="fas fa-users me-2"></i>Gestión de Clientes
+      </h2>
+      <div class="d-flex gap-2">
+    
+        <button class="btn btn-facturas" (click)="irAFacturas()">
+          <i class="fas fa-file-invoice me-2"></i>Ver Facturas
+        </button>
+        <button class="btn btn-volver" (click)="volverInicio()">
+          <i class="fas fa-arrow-left me-2"></i>Volver al Inicio
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <div *ngIf="clientes.length === 0" class="alert alert-info-custom text-center">
+    <i class="fas fa-user-friends fa-4x mb-3"></i>
+    <h4 class="text-dark">No hay clientes registrados</h4>
+    <p class="mb-0 text-muted">Los clientes se pueden crear desde el módulo de ventas</p>
+  </div>
+
+
+  <div *ngIf="clientes.length > 0" class="card-clientes">
+    <div class="card-header">
+      <div class="d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">
+          <i class="fas fa-list me-2"></i>Lista de Clientes 
+          <span class="badge bg-light ms-2">{{ clientes.length }}</span>
+        </h5>
+        <small><i class="fas fa-info-circle me-1"></i>Haz click en "Editar" para modificar un cliente</small>
+      </div>
+    </div>
+    
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-clientes">
+          <thead>
+            <tr>
+              <th width="12%">Nombre</th>
+              <th width="12%">Apellido</th>
+              <th width="12%">NIT</th>
+              <th width="12%">Teléfono</th>
+              <th width="16%">Email</th>
+              <th width="10%">Estado</th>
+              <th width="26%">Acciones</th> 
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let cliente of clientes" 
+                [class.editing-row]="modoEdicion && clienteEditando?.idCliente === cliente.idCliente">
+              
+              
+              <td *ngIf="modoEdicion && clienteEditando?.idCliente === cliente.idCliente">
+                <input type="text" class="form-control form-control-edit" 
+                       [(ngModel)]="clienteEditando.nombre" placeholder="Nombre">
+              </td>
+              <td *ngIf="modoEdicion && clienteEditando?.idCliente === cliente.idCliente">
+                <input type="text" class="form-control form-control-edit" 
+                       [(ngModel)]="clienteEditando.apellido" placeholder="Apellido">
+              </td>
+              <td *ngIf="modoEdicion && clienteEditando?.idCliente === cliente.idCliente">
+                <input type="text" class="form-control form-control-edit" 
+                       [(ngModel)]="clienteEditando.nit" placeholder="NIT">
+              </td>
+              <td *ngIf="modoEdicion && clienteEditando?.idCliente === cliente.idCliente">
+                <input type="text" class="form-control form-control-edit" 
+                       [(ngModel)]="clienteEditando.telefono" placeholder="Teléfono">
+              </td>
+              <td *ngIf="modoEdicion && clienteEditando?.idCliente === cliente.idCliente">
+                <input type="email" class="form-control form-control-edit" 
+                       [(ngModel)]="clienteEditando.email" placeholder="Email">
+              </td>
+              <td *ngIf="modoEdicion && clienteEditando?.idCliente === cliente.idCliente">
+                <select class="form-select form-control-edit" [(ngModel)]="clienteEditando.idEstado">
+                  <option [value]="1">Activo</option>
+                  <option [value]="2">Inactivo</option>
+                </select>
+              </td>
+              <td *ngIf="modoEdicion && clienteEditando?.idCliente === cliente.idCliente">
+                <div class="d-flex gap-2">
+                  <button class="btn btn-clientes btn-guardar" (click)="guardarEdicion()">
+                    <i class="fas fa-check me-1"></i>Guardar
+                  </button>
+                  <button class="btn btn-clientes btn-cancelar" (click)="cancelarEdicion()">
+                    <i class="fas fa-times me-1"></i>Cancelar
+                  </button>
+                </div>
+              </td>
+
+        
+              <td *ngIf="!modoEdicion || clienteEditando?.idCliente !== cliente.idCliente">
+                <strong>{{ cliente.nombre }}</strong>
+              </td>
+              <td *ngIf="!modoEdicion || clienteEditando?.idCliente !== cliente.idCliente">
+                {{ cliente.apellido }}
+              </td>
+              <td *ngIf="!modoEdicion || clienteEditando?.idCliente !== cliente.idCliente">
+                <span class="nit-code">{{ cliente.nit }}</span>
+              </td>
+              <td *ngIf="!modoEdicion || clienteEditando?.idCliente !== cliente.idCliente">
+                {{ cliente.telefono || 'No especificado' }}
+              </td>
+              <td *ngIf="!modoEdicion || clienteEditando?.idCliente !== cliente.idCliente">
+                {{ cliente.email || 'No especificado' }}
+              </td>
+              <td *ngIf="!modoEdicion || clienteEditando?.idCliente !== cliente.idCliente">
+                <span [class]="cliente.idEstado === 1 ? 'badge-estado activo' : 'badge-estado inactivo'">
+                  {{ getEstadoTexto(cliente.idEstado) }}
+                </span>
+              </td>
+              <td *ngIf="!modoEdicion || clienteEditando?.idCliente !== cliente.idCliente">
+                <div class="d-flex gap-2">
+             
+                  <button class="btn btn-clientes btn-facturas" 
+                          (click)="verFacturasCliente(cliente)" 
+                          [disabled]="modoEdicion"
+                          title="Ver facturas de este cliente">
+                    <i class="fas fa-file-invoice me-1"></i>Facturas
+                  </button>
+                  <button class="btn btn-clientes btn-editar" 
+                          (click)="iniciarEdicion(cliente)" 
+                          [disabled]="modoEdicion">
+                    <i class="fas fa-edit me-1"></i>Editar
+                  </button>
+                  <button class="btn btn-clientes btn-eliminar" 
+                          (click)="eliminarCliente(cliente.idCliente)" 
+                          [disabled]="modoEdicion">
+                    <i class="fas fa-trash me-1"></i>Eliminar
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="mostrarFacturas && clienteSeleccionado" class="modal-facturas-overlay">
+    <div class="modal-facturas-container">
+      <div class="modal-facturas-header">
+        <h4>
+          <i class="fas fa-file-invoice me-2"></i>
+          Facturas de {{ clienteSeleccionado.nombre }} {{ clienteSeleccionado.apellido }}
+        </h4>
+        <button class="btn-close-modal" (click)="cerrarFacturas()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <div class="modal-facturas-body">
+      
+        <div class="cliente-info mb-4">
+          <div class="row">
+            <div class="col-md-4">
+              <strong>NIT:</strong> {{ clienteSeleccionado.nit || 'No especificado' }}
+            </div>
+            <div class="col-md-4">
+              <strong>Teléfono:</strong> {{ clienteSeleccionado.telefono || 'No especificado' }}
+            </div>
+            <div class="col-md-4">
+              <strong>Email:</strong> {{ clienteSeleccionado.email || 'No especificado' }}
+            </div>
+          </div>
+        </div>
+
+    
+        <div *ngIf="facturasCliente.length > 0" class="table-responsive">
+          <table class="table table-facturas">
+            <thead>
+              <tr>
+                <th>Número</th>
+                <th>Fecha</th>
+                <th>Vendedor</th>
+                <th>Sucursal</th>
+                <th>Total</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let factura of facturasCliente">
+                <td>
+                  <strong class="text-primary">{{ factura.numero }}</strong>
+                </td>
+                <td>{{ formatearFecha(factura.fecha) }}</td>
+                <td>{{ factura.vendedor?.nombre || 'No especificado' }}</td>
+                <td>
+                  <span class="badge-sucursal">{{ factura.sucursal?.nombre || 'No especificado' }}</span>
+                </td>
+                <td>
+                  <span class="text-success fw-bold">{{ formatearMoneda(factura.total) }}</span>
+                </td>
+                <td>
+                  <span [class]="getEstadoFacturaClase(factura.estado)">
+                    {{ getEstadoFacturaTexto(factura.estado) }}
+                  </span>
+                </td>
+                <td>
+                  <button class="btn btn-sm btn-outline-primary" title="Ver detalles">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      
+        <div *ngIf="facturasCliente.length === 0" class="text-center py-5">
+          <i class="fas fa-file-invoice fa-3x text-muted mb-3"></i>
+          <h5 class="text-muted">No hay facturas registradas</h5>
+          <p class="text-muted">Este cliente no tiene facturas en el sistema</p>
+        </div>
+      </div>
+
+      <div class="modal-facturas-footer">
+        <button class="btn btn-secondary" (click)="cerrarFacturas()">
+          <i class="fas fa-times me-2"></i>Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="mt-4">
+    <div class="alert alert-light-custom">
+      <small>
+        <i class="fas fa-info-circle me-1"></i>
+        <strong>Nota:</strong> Para crear nuevos clientes, utiliza la opción "Nuevo Cliente" en el módulo de ventas.
+      </small>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,362 @@
+// Variables de colores
+$primary-color: #2c3e50;
+$success-color: #27ae60;
+$warning-color: #f39c12;
+$info-color: #3498db;
+$danger-color: #e74c3c;
+$secondary-color: #7f8c8d;
+
+// Mixins
+@mixin card-shadow {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+  }
+}
+
+@mixin gradient-bg($color1, $color2) {
+  background: linear-gradient(135deg, $color1 0%, $color2 100%);
+}
+
+// Estilos principales
+.reportes-container {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 20px 0;
+}
+
+// Header del reporte
+.reporte-header {
+  @include gradient-bg(#667eea, #764ba2);
+  color: white;
+  border-radius: 15px 15px 0 0;
+  padding: 20px;
+  
+  h3 {
+    margin: 0;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+}
+
+// Tarjetas de estadísticas
+.estadistica-card {
+  @include card-shadow;
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+  
+  .card-body {
+    padding: 20px;
+    
+    h5 {
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 10px;
+      opacity: 0.9;
+    }
+    
+    h2, h6 {
+      margin: 0;
+      font-weight: 700;
+    }
+  }
+  
+  // Colores específicos para cada tarjeta
+  &.card-primary {
+    @include gradient-bg(#3498db, #2980b9);
+  }
+  
+  &.card-success {
+    @include gradient-bg(#27ae60, #229954);
+  }
+  
+  &.card-warning {
+    @include gradient-bg(#f39c12, #e67e22);
+  }
+  
+  &.card-secondary {
+    @include gradient-bg(#7f8c8d, #95a5a6);
+  }
+  
+  &.card-info {
+    @include gradient-bg(#17a2b8, #138496);
+  }
+  
+  &.card-danger {
+    @include gradient-bg(#e74c3c, #c0392b);
+  }
+}
+
+// Filtros
+.filtros-section {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  @include card-shadow;
+  
+  .form-label {
+    font-weight: 600;
+    color: $primary-color;
+    margin-bottom: 8px;
+  }
+  
+  .form-select {
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 10px;
+    transition: all 0.3s ease;
+    
+    &:focus {
+      border-color: $info-color;
+      box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+    }
+  }
+}
+
+// Botones
+.btn-reporte {
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+  
+  &.btn-exportar {
+    @include gradient-bg(#27ae60, #229954);
+    color: white;
+    
+    &:hover {
+      @include gradient-bg(#229954, #1e8449);
+      transform: translateY(-2px);
+    }
+  }
+  
+  &.btn-filtro {
+    background: #f8f9fa;
+    color: $primary-color;
+    border: 2px solid #dee2e6;
+    
+    &:hover {
+      background: #e9ecef;
+      border-color: $info-color;
+    }
+  }
+  
+  &.btn-actualizar {
+    @include gradient-bg(#3498db, #2980b9);
+    color: white;
+    
+    &:hover {
+      @include gradient-bg(#2980b9, #2471a3);
+      transform: translateY(-2px);
+    }
+  }
+}
+
+// Tabla de reportes
+.tabla-reportes {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  @include card-shadow;
+  
+  thead {
+    th {
+      background: $primary-color;
+      color: white;
+      border: none;
+      padding: 15px 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+    }
+  }
+  
+  tbody {
+    tr {
+      transition: all 0.3s ease;
+      
+      &:hover {
+        background-color: #f8f9fa;
+        transform: scale(1.01);
+      }
+      
+      td {
+        padding: 12px;
+        vertical-align: middle;
+        border-color: #e9ecef;
+        
+        &.text-end {
+          font-family: 'Courier New', monospace;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}
+
+// Badges personalizados
+.badge {
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  
+  &.bg-primary { background: $info-color !important; }
+  &.bg-success { background: $success-color !important; }
+  &.bg-warning { background: $warning-color !important; }
+  &.bg-info { background: $info-color !important; }
+  &.bg-secondary { background: $secondary-color !important; }
+  &.bg-danger { background: $danger-color !important; }
+}
+
+// Resumen visual (tarjetas de zonas)
+.resumen-zonas {
+  .zona-card {
+    @include card-shadow;
+    border: none;
+    border-radius: 12px;
+    text-align: center;
+    padding: 20px;
+    background: white;
+    
+    h5 {
+      color: $primary-color;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+    
+    h3 {
+      color: $success-color;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    
+    .badge {
+      font-size: 0.7rem;
+    }
+  }
+}
+
+// Estados de la tabla
+.table-warning {
+  background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%) !important;
+}
+
+.table-info {
+  background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%) !important;
+}
+
+.table-success {
+  background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%) !important;
+}
+
+// Loading spinner
+.loading-spinner {
+  .spinner-border {
+    width: 3rem;
+    height: 3rem;
+    border-width: 0.3em;
+  }
+  
+  p {
+    color: $primary-color;
+    font-weight: 500;
+    margin-top: 15px;
+  }
+}
+
+// Alertas
+.alert-reporte {
+  border-radius: 10px;
+  border: none;
+  padding: 15px 20px;
+  font-weight: 500;
+  
+  &.alert-danger {
+    @include gradient-bg(#e74c3c, #c0392b);
+    color: white;
+  }
+  
+  &.alert-success {
+    @include gradient-bg(#27ae60, #229954);
+    color: white;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .reportes-container {
+    padding: 10px;
+  }
+  
+  .estadistica-card .card-body {
+    padding: 15px;
+    
+    h2 {
+      font-size: 1.5rem;
+    }
+  }
+  
+  .filtros-section {
+    padding: 15px;
+    
+    .col-md-3 {
+      margin-bottom: 15px;
+    }
+  }
+  
+  .tabla-reportes {
+    font-size: 0.85rem;
+    
+    th, td {
+      padding: 8px 6px;
+    }
+  }
+  
+  .btn-reporte {
+    padding: 8px 15px;
+    font-size: 0.9rem;
+  }
+}
+
+// Animaciones
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+// Scroll personalizado
+.table-responsive::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background: $info-color;
+  border-radius: 10px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background: darken($info-color, 10%);
+}

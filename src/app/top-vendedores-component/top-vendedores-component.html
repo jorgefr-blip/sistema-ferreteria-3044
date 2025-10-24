@@ -1,0 +1,159 @@
+<!-- src/app/components/top-vendedores-component/top-vendedores-component.html -->
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header bg-success text-white">
+      <h3 class="mb-0">👨‍💼 Top Vendedores por Zona</h3>
+    </div>
+
+    <div class="card-body">
+      <!-- ESTADÍSTICAS -->
+      <div class="row mb-4" *ngIf="estadisticas.totalVendedores">
+        <div class="col-md-3">
+          <div class="card text-white bg-primary">
+            <div class="card-body text-center">
+              <h5>Total Vendedores</h5>
+              <h2>{{estadisticas.totalVendedores}}</h2>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card text-white bg-info">
+            <div class="card-body text-center">
+              <h5>Vendedor Top</h5>
+              <h6>{{estadisticas.vendedorTop}}</h6>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card text-white bg-warning">
+            <div class="card-body text-center">
+              <h5>Ventas Totales</h5>
+              <h6>{{formatearMoneda(estadisticas.ventasTotales)}}</h6>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card text-white bg-secondary">
+            <div class="card-body text-center">
+              <h5>Zona Top</h5>
+              <h6>{{estadisticas.zonaTop}}</h6>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FILTROS -->
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <label class="form-label">Filtrar por Zona:</label>
+          <select class="form-select" [(ngModel)]="filtroZona" (change)="aplicarFiltros()">
+            <option value="">Todas las zonas</option>
+            <option value="Zona Central">Zona Central</option>
+            <option value="Zona Norte">Zona Norte</option>
+            <option value="Zona Sur">Zona Sur</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Filtrar por Región:</label>
+          <select class="form-select" [(ngModel)]="filtroRegion" (change)="aplicarFiltros()">
+            <option value="">Todas las regiones</option>
+            <option value="Centro">Centro</option>
+            <option value="Norte">Norte</option>
+            <option value="Sur">Sur</option>
+          </select>
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+          <button class="btn btn-outline-secondary me-2" (click)="limpiarFiltros()">
+            🔄 Limpiar
+          </button>
+          <button class="btn btn-success" (click)="cargarTopVendedores()">
+            🔁 Actualizar
+          </button>
+        </div>
+      </div>
+
+      <!-- LOADING -->
+      <div *ngIf="loading" class="text-center py-4">
+        <div class="spinner-border text-success" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-2">Cargando reporte de vendedores...</p>
+      </div>
+
+      <!-- ERROR -->
+      <div *ngIf="error && !loading" class="alert alert-danger">
+        {{error}}
+      </div>
+
+      <!-- TABLA DE VENDEDORES -->
+      <div *ngIf="!loading && !error" class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th>#</th>
+              <th>Vendedor</th>
+              <th>Contacto</th>
+              <th>Sucursal</th>
+              <th>Zona</th>
+              <th>Ventas</th>
+              <th>Total Ventas</th>
+              <th>Promedio</th>
+              <th>Clientes</th>
+              <th>% Región</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let vendedor of topVendedores; let i = index" 
+                [class.table-warning]="i === 0"
+                [class.table-info]="i === 1"
+                [class.table-success]="i === 2">
+              
+              <td><strong>{{i + 1}}</strong></td>
+              
+              <td>
+                <strong>{{vendedor.vendedor}}</strong>
+              </td>
+              
+              <td>
+                <small>📧 {{vendedor.correo}}</small>
+              </td>
+              
+              <td>{{vendedor.sucursal}}</td>
+              
+              <td>
+                <span class="badge bg-secondary">{{vendedor.zona}}</span>
+              </td>
+              
+              <td class="text-center">
+                <span class="badge bg-primary">{{vendedor.totalVentas}}</span>
+              </td>
+              
+              <td class="text-end">
+                <strong class="text-success">{{formatearMoneda(vendedor.totalVentasMonto)}}</strong>
+              </td>
+              
+              <td class="text-end">{{formatearMoneda(vendedor.promedioVenta)}}</td>
+              
+              <td class="text-center">
+                <span class="badge bg-info">{{vendedor.clientesAtendidos}}</span>
+              </td>
+              
+              <td class="text-center">
+                <span class="badge" [class]="getRendimientoColor(vendedor.porcentajeRegion)">
+                  {{formatearPorcentaje(vendedor.porcentajeRegion)}}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div *ngIf="topVendedores.length === 0" class="text-center py-4">
+          <p class="text-muted">No se encontraron vendedores</p>
+          <button class="btn btn-primary" (click)="cargarTopVendedores()">
+            Intentar de nuevo
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

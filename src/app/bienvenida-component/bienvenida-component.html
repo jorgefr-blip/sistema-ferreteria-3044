@@ -1,0 +1,151 @@
+<div class="bienvenida-container">
+  <div class="header-bienvenida bg-primary text-white p-4 rounded-bottom-4 shadow-sm">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        <div class="logo-container me-3">
+          <i class="fas fa-store fa-2x"></i>
+        </div>
+        <div>
+          <h1 class="mb-1 fw-bold">Sistema de Gestión</h1>
+          <p class="mb-0 opacity-75">
+            <i class="fas fa-calendar me-1"></i>
+            {{ today | date:'fullDate' | titlecase }}
+          </p>
+        </div>
+      </div>
+      <div class="text-end">
+        <div class="user-info bg-white text-dark rounded-3 px-3 py-2 shadow-sm">
+          <div class="d-flex align-items-center">
+            <i class="fas fa-user-circle me-2 text-primary"></i>
+            <div>
+              <strong class="d-block">{{ getNombreUsuario() }}</strong>
+              <small class="text-muted">{{ getRolesUsuario() }}</small>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-light btn-sm mt-2 fw-medium" (click)="logout()">
+          <i class="fas fa-sign-out-alt me-1"></i>Cerrar Sesión
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="welcome-message text-center my-5 py-4">
+    <div class="welcome-icon mb-3">
+      <div class="icon-circle bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center">
+        <i class="fas fa-hand-wave fa-2x"></i>
+      </div>
+    </div>
+    <h2 class="welcome-title text-dark fw-bold mb-2">¡Bienvenido, {{ getNombreUsuario() }}!</h2>
+    <p class="welcome-subtitle text-muted fs-5">Selecciona una opción para comenzar</p>
+  </div>
+
+  <!-- 👇 BOTONES DE ACCESO RÁPIDO AGREGADOS AQUÍ -->
+  <div class="container mb-5">
+    <div class="row justify-content-center g-3">
+      <div class="col-lg-5 col-md-6">
+        <button class="btn btn-info w-100 py-3 fw-bold fs-5" (click)="navegarARuta('/bitacora')">
+          <i class="fas fa-history me-2"></i>
+          Ver Bitácora del Sistema
+        </button>
+      </div>
+      <div class="col-lg-5 col-md-6">
+        <button class="btn btn-success w-100 py-3 fw-bold fs-5" (click)="navegarARuta('/listaFacturas')">
+          <i class="fas fa-file-invoice me-2"></i>
+          Ver Listado de Facturas
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- 👆 FIN BOTONES DE ACCESO RÁPIDO -->
+
+  <div *ngIf="loadingMenus" class="text-center py-5">
+    <div class="spinner-border text-primary spinner-border-lg" role="status">
+      <span class="visually-hidden">Cargando menús...</span>
+    </div>
+    <p class="mt-3 text-muted fs-5">Cargando menús desde el sistema...</p>
+  </div>
+
+  <div *ngIf="!loadingMenus && menus.length > 0" class="menus-container">
+    <div class="row g-4">
+      <div *ngFor="let menu of menus" class="col-12">
+        <div class="menu-section">
+          <h3 class="menu-title mb-4">
+            <i class="fas fa-folder-open me-2 text-primary"></i>{{ menu.opcionMenu }}
+          </h3>
+          
+          <div class="row g-3">
+            <div *ngFor="let opcion of menu.opcionesMenu" class="col-xl-4 col-lg-6 col-md-6">
+              <div class="opcion-card h-100" 
+                   (click)="navegarARuta(opcion.ruta!)"
+                   role="button"
+                   tabindex="0"
+                   (keyup.enter)="navegarARuta(opcion.ruta!)"
+                   [title]="opcion.descripcion">
+                <div class="card h-100 border-0 shadow-sm hover-shadow transition-all">
+                  <div class="card-body p-4">
+                    <div class="d-flex align-items-start mb-3">
+                      <div class="opcion-icon me-3">
+                        <div class="icon-container bg-light rounded-3 p-3">
+                          <i [class]="opcion.icono + ' fa-lg text-primary'"></i>
+                        </div>
+                      </div>
+                      <div class="flex-grow-1">
+                        <h4 class="opcion-title fw-bold text-dark mb-2">{{ opcion.nombreOpcion }}</h4>
+                        <p class="opcion-desc text-muted mb-3 small">{{ opcion.descripcion }}</p>
+                      </div>
+                    </div>
+                    <div class="opcion-action d-flex justify-content-between align-items-center mt-auto">
+                      <span class="action-text text-primary small fw-medium">Acceder</span>
+                      <i class="fas fa-arrow-right action-arrow text-primary"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!loadingMenus && menus.length === 0" class="no-menus-message text-center py-5">
+    <div class="no-menus-icon mb-4">
+      <div class="icon-circle bg-light rounded-circle d-inline-flex align-items-center justify-content-center p-4">
+        <i class="fas fa-lock fa-2x text-muted"></i>
+      </div>
+    </div>
+    <h3 class="text-dark mb-3 fw-bold">No tienes opciones disponibles</h3>
+    <p class="text-muted mb-4 fs-5">
+      Tu usuario no tiene asignado ningún permiso para acceder a las funcionalidades del sistema.
+      <br>
+      <small class="text-warning">Contacta al administrador para solicitar acceso.</small>
+    </p>
+    <button class="btn btn-primary btn-lg" (click)="logout()">
+      <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+    </button>
+  </div>
+
+  <div class="footer-bienvenida mt-5 pt-4 border-top">
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <h6 class="footer-title fw-bold text-dark mb-2">
+          <i class="fas fa-info-circle me-2 text-primary"></i>Información del Sistema
+        </h6>
+        <p class="footer-text text-muted mb-0">
+          Sistema de gestión integral - Menús dinámicos desde base de datos
+        </p>
+      </div>
+      <div class="col-md-4 text-md-end">
+        <div class="session-info bg-light rounded-3 px-3 py-2">
+          <h6 class="footer-title fw-bold text-dark mb-1">
+            <i class="fas fa-shield-alt me-2 text-success"></i>Sesión Segura
+          </h6>
+          <p class="footer-text text-muted mb-0 small">
+            Conectado como: <strong class="text-dark">{{ getNombreUsuario() }}</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

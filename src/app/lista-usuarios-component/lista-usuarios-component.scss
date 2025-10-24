@@ -1,0 +1,301 @@
+.lista-usuarios-container {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.header-usuarios {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  
+  h2 {
+    color: #2c3e50;
+    font-weight: 700;
+    margin: 0;
+    
+    i {
+      color: #9b59b6;
+    }
+  }
+}
+
+.card-usuarios {
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  margin-bottom: 25px;
+  
+  .card-header {
+    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+    color: white;
+    border-radius: 15px 15px 0 0 !important;
+    border: none;
+    padding: 20px;
+    
+    h5 {
+      font-weight: 600;
+      margin: 0;
+      
+      .badge {
+        font-size: 0.8em;
+      }
+    }
+  }
+}
+
+.table-usuarios {
+  border-radius: 0 0 15px 15px;
+  overflow: hidden;
+  
+  thead {
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    
+    th {
+      border: none;
+      font-weight: 600;
+      color: white;
+      padding: 15px 12px;
+      font-size: 0.9em;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+  
+  tbody {
+    tr {
+      transition: all 0.3s ease;
+      
+      &:hover {
+        background-color: #f8f9fa;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      
+      &.editing-row {
+        background: linear-gradient(135deg, #fff9e6, #fff3cd);
+        border-left: 4px solid #ffc107;
+        
+        td {
+          background: transparent;
+        }
+      }
+    }
+    
+    td {
+      padding: 12px;
+      vertical-align: middle;
+      border-color: #ecf0f1;
+      font-weight: 500;
+    }
+  }
+}
+
+.btn-usuarios {
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+  padding: 8px 16px;
+  font-size: 0.85em;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  &.btn-crear {
+    background: linear-gradient(135deg, #27ae60, #229954);
+    color: white;
+    
+    &:hover {
+      background: linear-gradient(135deg, #229954, #1e8449);
+    }
+  }
+  
+  &.btn-editar {
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+    color: white;
+    
+    &:hover {
+      background: linear-gradient(135deg, #e67e22, #d35400);
+    }
+  }
+  
+  &.btn-eliminar {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    
+    &:hover {
+      background: linear-gradient(135deg, #c0392b, #a93226);
+    }
+  }
+  
+  &.btn-activar {
+    background: linear-gradient(135deg, #27ae60, #229954);
+    color: white;
+    
+    &:hover {
+      background: linear-gradient(135deg, #229954, #1e8449);
+    }
+  }
+  
+  &.btn-guardar {
+    background: linear-gradient(135deg, #27ae60, #229954);
+    color: white;
+    
+    &:hover {
+      background: linear-gradient(135deg, #229954, #1e8449);
+    }
+  }
+  
+  &.btn-cancelar {
+    background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+    color: white;
+    
+    &:hover {
+      background: linear-gradient(135deg, #7f8c8d, #707b7c);
+    }
+  }
+  
+  &.btn-volver {
+    background: linear-gradient(135deg, #6c757d, #5a6268);
+    color: white;
+    border-radius: 25px;
+    padding: 10px 20px;
+    
+    &:hover {
+      background: linear-gradient(135deg, #5a6268, #495057);
+    }
+  }
+}
+
+.badge-estado {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.8em;
+  
+  &.activo {
+    background: linear-gradient(135deg, #27ae60, #229954);
+    color: white;
+  }
+  
+  &.inactivo {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+  }
+}
+
+.badge-rol {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.75em;
+  margin: 2px;
+}
+
+.form-control-edit {
+  border: 2px solid #9b59b6;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.9em;
+  transition: all 0.3s ease;
+  
+  &:focus {
+    border-color: #8e44ad;
+    box-shadow: 0 0 0 3px rgba(155, 89, 182, 0.1);
+  }
+}
+
+.formulario-crear {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  
+  h4 {
+    color: #2c3e50;
+    font-weight: 600;
+    margin-bottom: 20px;
+    
+    i {
+      color: #9b59b6;
+    }
+  }
+}
+
+.roles-container {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 15px;
+  border: 1px solid #e9ecef;
+  
+  .form-check {
+    margin-bottom: 8px;
+    
+    .form-check-input {
+      margin-top: 0.3em;
+    }
+    
+    .form-check-label {
+      font-weight: 500;
+      color: #2c3e50;
+    }
+  }
+}
+
+.alert-info-custom {
+  background: linear-gradient(135deg, #e8f6f3, #d0ece7);
+  border: none;
+  border-radius: 15px;
+  border-left: 5px solid #1abc9c;
+  
+  i {
+    color: #1abc9c;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .lista-usuarios-container {
+    padding: 10px;
+  }
+  
+  .header-usuarios {
+    padding: 20px;
+    
+    h2 {
+      font-size: 1.5rem;
+    }
+  }
+  
+  .btn-usuarios {
+    padding: 6px 12px;
+    font-size: 0.8em;
+    
+    &.btn-volver {
+      padding: 8px 16px;
+    }
+  }
+  
+  .table-usuarios {
+    font-size: 0.85em;
+    
+    thead th {
+      padding: 10px 8px;
+    }
+    
+    tbody td {
+      padding: 8px;
+    }
+  }
+}

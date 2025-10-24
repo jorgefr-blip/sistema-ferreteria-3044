@@ -1,0 +1,20 @@
+// Agrega esto al archivo existente
+.top-vendedores-special {
+  .vendedor-estrella {
+    background: linear-gradient(135deg, #fffaf0 0%, #fef9e7 100%);
+    border: 2px solid #f39c12;
+  }
+  
+  .estrellas {
+    color: #f39c12;
+    font-size: 1.2rem;
+  }
+  
+  .performance-alto {
+    border-left: 4px solid #27ae60;
+  }
+  
+  .performance-medio {
+    border-left: 4px solid #f39c12;
+  }
+}

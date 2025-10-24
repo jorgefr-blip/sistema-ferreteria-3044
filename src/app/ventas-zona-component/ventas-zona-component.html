@@ -1,0 +1,196 @@
+<!-- src/app/components/ventas-zona-component/ventas-zona-component.html -->
+<div class="container mt-4">
+  <div class="card">
+    <!-- HEADER -->
+    <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+      <h3 class="mb-0"> Ventas por Zona - Análisis Geográfico</h3>
+      <button class="btn btn-light btn-sm" (click)="exportarAExcel()">
+        Exportar Excel
+      </button>
+    </div>
+
+    <div class="card-body">
+      <!-- ESTADÍSTICAS -->
+      <div class="row mb-4" *ngIf="estadisticas.totalRegistros">
+        <div class="col-md-3">
+          <div class="card text-white bg-primary">
+            <div class="card-body text-center">
+              <h5>Total Registros</h5>
+              <h2>{{estadisticas.totalRegistros}}</h2>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card text-white bg-success">
+            <div class="card-body text-center">
+              <h5>Zona Top</h5>
+              <h6>{{estadisticas.zonaTop}}</h6>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card text-white bg-warning">
+            <div class="card-body text-center">
+              <h5>Mes Top</h5>
+              <h6>{{estadisticas.mesTop}}</h6>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card text-white bg-secondary">
+            <div class="card-body text-center">
+              <h5>Total General</h5>
+              <h6>{{formatearMoneda(estadisticas.totalGeneral)}}</h6>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FILTROS -->
+      <div class="row mb-3">
+        <div class="col-md-3">
+          <label class="form-label">Filtrar por Zona:</label>
+          <select class="form-select" [(ngModel)]="filtroZona" (change)="aplicarFiltros()">
+            <option value="">Todas las zonas</option>
+            <option *ngFor="let zona of zonasDisponibles" [value]="zona">{{zona}}</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Filtrar por Región:</label>
+          <select class="form-select" [(ngModel)]="filtroRegion" (change)="aplicarFiltros()">
+            <option value="">Todas las regiones</option>
+            <option value="Centro">Centro</option>
+            <option value="Norte">Norte</option>
+            <option value="Sur">Sur</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Filtrar por Mes:</label>
+          <select class="form-select" [(ngModel)]="filtroMes" (change)="filtrarPorMes()">
+            <option value="">Todos los meses</option>
+            <option *ngFor="let mes of mesesDisponibles" [value]="mes">{{mes}}</option>
+          </select>
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+          <button class="btn btn-outline-secondary me-2" (click)="limpiarFiltros()">
+             Limpiar
+          </button>
+          <button class="btn btn-info" (click)="cargarVentasZona()">
+             Actualizar
+          </button>
+        </div>
+      </div>
+
+      <!-- RESUMEN VISUAL SIMPLE (sin gráficos complejos) -->
+      <div class="row mb-4" *ngIf="ventasZona.length > 0">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0"> Resumen por Zona</h5>
+            </div>
+            <div class="card-body">
+              <div class="row text-center">
+                <div class="col-md-4" *ngFor="let zona of getZonasUnicas()">
+                  <div class="card mb-3">
+                    <div class="card-body">
+                      <h5>{{zona}}</h5>
+                      <h3 class="text-success">
+                        {{formatearMoneda(getTotalPorZona(zona))}}
+                      </h3>
+                      <span class="badge bg-primary">
+                        {{getVentasCountPorZona(zona)}} ventas
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LOADING -->
+      <div *ngIf="loading" class="text-center py-4">
+        <div class="spinner-border text-info" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-2">Cargando reporte de ventas por zona...</p>
+      </div>
+
+      <!-- ERROR -->
+      <div *ngIf="error && !loading" class="alert alert-danger">
+        {{error}}
+      </div>
+
+      <!-- TABLA DE VENTAS POR ZONA -->
+      <div *ngIf="!loading && !error" class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th>Zona</th>
+              <th>Región</th>
+              <th>Sucursal</th>
+              <th>Mes</th>
+              <th>Total Ventas</th>
+              <th>Monto Total</th>
+              <th>Promedio</th>
+              <th>Clientes</th>
+              <th>Vendedores</th>
+              <th>% Global</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let venta of ventasZona" 
+                [class.table-info]="venta.porcentajeGlobal > 20">
+              
+              <td>
+                <strong>{{venta.zona}}</strong>
+              </td>
+              
+              <td>
+                <span class="badge bg-secondary">{{venta.region}}</span>
+              </td>
+              
+              <td>{{venta.sucursal}}</td>
+              
+              <td>
+                <small class="text-muted">{{venta.mesNombre}}</small>
+              </td>
+              
+              <td class="text-center">
+                <span class="badge bg-primary">{{venta.totalVentas}}</span>
+              </td>
+              
+              <td class="text-end">
+                <strong class="text-success">{{formatearMoneda(venta.montoTotal)}}</strong>
+              </td>
+              
+              <td class="text-end">{{formatearMoneda(venta.promedioVenta)}}</td>
+              
+              <td class="text-center">
+                <span class="badge bg-info">{{venta.clientesAtendidos}}</span>
+              </td>
+              
+              <td class="text-center">
+                <span class="badge bg-warning">{{venta.vendedoresActivos}}</span>
+              </td>
+              
+              <td class="text-center">
+                <span class="badge" [class]="getColorMonto(venta.porcentajeGlobal)">
+                  {{formatearPorcentaje(venta.porcentajeGlobal)}}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div *ngIf="ventasZona.length === 0" class="text-center py-4">
+          <p class="text-muted">No se encontraron ventas con los filtros aplicados</p>
+          <button class="btn btn-primary" (click)="cargarVentasZona()">
+            Intentar de nuevo
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

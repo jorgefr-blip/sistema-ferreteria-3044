@@ -1,0 +1,416 @@
+// Variables de colores para estados de stock
+$stock-normal: #198754;
+$stock-bajo: #ffc107;
+$stock-critico: #dc3545;
+$stock-sin-stock: #6c757d;
+
+// Estilos principales
+.inventario-container {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+// Cards y contenedores
+.card {
+  border: none;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  border-radius: 0.5rem;
+  
+  .card-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    background-color: #f8f9fa;
+    padding: 1rem 1.25rem;
+    
+    .card-title {
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 0;
+    }
+  }
+  
+  .card-body {
+    padding: 1.5rem;
+  }
+}
+
+// Tabla de inventario
+.table {
+  margin-bottom: 0;
+  
+  thead {
+    th {
+      background-color: #f8f9fa;
+      border-bottom: 2px solid #dee2e6;
+      font-weight: 600;
+      color: #495057;
+      padding: 0.75rem 0.5rem;
+      vertical-align: middle;
+      
+      &.text-center {
+        text-align: center;
+      }
+    }
+  }
+  
+  tbody {
+    tr {
+      transition: all 0.2s ease-in-out;
+      
+      &:hover {
+        background-color: rgba(0, 123, 255, 0.05);
+        transform: translateY(-1px);
+      }
+      
+      // Estados de stock con colores de fondo suaves
+      &.table-warning {
+        background-color: rgba($stock-bajo, 0.1);
+        
+        &:hover {
+          background-color: rgba($stock-bajo, 0.15);
+        }
+      }
+      
+      &.table-danger {
+        background-color: rgba($stock-critico, 0.1);
+        
+        &:hover {
+          background-color: rgba($stock-critico, 0.15);
+        }
+      }
+      
+      td {
+        padding: 0.75rem 0.5rem;
+        vertical-align: middle;
+        border-color: #e9ecef;
+        
+        &.text-center {
+          text-align: center;
+        }
+      }
+    }
+  }
+}
+
+// Badges de estado
+.badge {
+  font-size: 0.75em;
+  font-weight: 600;
+  padding: 0.35em 0.65em;
+  
+  // Estados de stock
+  &.bg-success {
+    background-color: $stock-normal !important;
+  }
+  
+  &.bg-warning {
+    background-color: $stock-bajo !important;
+    color: #000 !important;
+  }
+  
+  &.bg-danger {
+    background-color: $stock-critico !important;
+  }
+  
+  &.bg-secondary {
+    background-color: #6c757d !important;
+  }
+  
+  &.bg-primary {
+    background-color: #0d6efd !important;
+  }
+}
+
+// Cards de resumen
+.card.bg-success,
+.card.bg-warning,
+.card.bg-danger {
+  border: none;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+  
+  .card-body {
+    padding: 0.75rem 1rem;
+    
+    small {
+      opacity: 0.9;
+      font-size: 0.75em;
+    }
+    
+    h6 {
+      margin-bottom: 0;
+      font-weight: 700;
+    }
+  }
+}
+
+// Alertas informativas
+.alert {
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  
+  &.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border-left: 4px solid #0dcaf0;
+  }
+  
+  &.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border-left: 4px solid #ffc107;
+  }
+  
+  ul {
+    margin-bottom: 0;
+    
+    li {
+      margin-bottom: 0.25rem;
+    }
+  }
+}
+
+// Botones
+.btn {
+  border-radius: 0.375rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+  }
+  
+  &.btn-outline-primary {
+    border: 2px solid #0d6efd;
+    color: #0d6efd;
+    
+    &:hover {
+      background-color: #0d6efd;
+      border-color: #0d6efd;
+    }
+    
+    &:disabled {
+      opacity: 0.6;
+      transform: none;
+      box-shadow: none;
+    }
+  }
+}
+
+// Spinner de carga
+.spinner-border {
+  width: 2rem;
+  height: 2rem;
+  border-width: 0.2em;
+}
+
+// Estados de texto
+.text-muted {
+  color: #6c757d !important;
+}
+
+.text-primary {
+  color: #0d6efd !important;
+}
+
+// Iconos
+.fas {
+  &.fa-boxes {
+    color: #0d6efd;
+  }
+  
+  &.fa-sync-alt {
+    &.fa-spin {
+      animation: fa-spin 1s infinite linear;
+    }
+  }
+  
+  &.fa-box-open {
+    opacity: 0.5;
+  }
+  
+  &.fa-info-circle {
+    color: #0dcaf0;
+  }
+  
+  &.fa-lightbulb {
+    color: #ffc107;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .container-fluid {
+    padding: 1rem;
+  }
+  
+  .card-body {
+    padding: 1rem;
+  }
+  
+  .table-responsive {
+    font-size: 0.875rem;
+    
+    th, td {
+      padding: 0.5rem 0.25rem;
+    }
+  }
+  
+  // Ocultar algunas columnas en móvil
+  .d-none-mobile {
+    display: none !important;
+  }
+  
+  // Ajustar cards de resumen
+  .card.bg-success,
+  .card.bg-warning,
+  .card.bg-danger {
+    margin-bottom: 0.5rem;
+    
+    .card-body {
+      padding: 0.5rem;
+      
+      h6 {
+        font-size: 0.875rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .d-flex.justify-content-between {
+    flex-direction: column;
+    gap: 1rem;
+    
+    > div {
+      text-align: center;
+    }
+  }
+  
+  .btn {
+    width: 100%;
+  }
+}
+
+// Animaciones
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.table tbody tr {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+// Estados de stock con indicadores visuales
+.stock-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+  
+  &.stock-normal {
+    background-color: $stock-normal;
+  }
+  
+  &.stock-bajo {
+    background-color: $stock-bajo;
+  }
+  
+  &.stock-critico {
+    background-color: $stock-critico;
+  }
+  
+  &.stock-sin-stock {
+    background-color: $stock-sin-stock;
+  }
+}
+
+// Mejoras visuales para números de stock
+.fw-bold.fs-6 {
+  font-size: 1.1rem !important;
+  
+  &.stock-critico {
+    color: $stock-critico;
+  }
+  
+  &.stock-bajo {
+    color: $stock-bajo;
+  }
+  
+  &.stock-normal {
+    color: $stock-normal;
+  }
+}
+
+// Header con gradiente sutil
+.header-bienvenida {
+  background: linear-gradient(135deg, #0d6efd 0%, #0dcaf0 100%);
+}
+
+// Efectos hover mejorados
+.opcion-card {
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+  }
+}
+
+// Scroll suave
+.table-responsive {
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 transparent;
+  
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background-color: #c1c1c1;
+    border-radius: 3px;
+  }
+}
+
+// Estados de carga
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  border-radius: 0.5rem;
+}
+
+// Tooltips personalizados
+.tooltip-custom {
+  .tooltip-inner {
+    background-color: #2c3e50;
+    border-radius: 0.375rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+  
+  .tooltip-arrow {
+    &::before {
+      border-top-color: #2c3e50;
+    }
+  }
+}

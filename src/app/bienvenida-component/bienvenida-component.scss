@@ -1,0 +1,120 @@
+.bienvenida-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 0;
+}
+
+.header-bienvenida {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%) !important;
+}
+
+.icon-circle {
+  width: 80px;
+  height: 80px;
+}
+
+.opcion-card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  .card {
+    transition: all 0.3s ease;
+    border: 1px solid #e9ecef;
+    
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+      border-color: #007bff;
+    }
+  }
+  
+  &:focus {
+    outline: none;
+    
+    .card {
+      box-shadow: 0 0 0 3px rgba(0,123,255,0.25) !important;
+    }
+  }
+}
+
+.icon-container {
+  transition: all 0.3s ease;
+}
+
+.opcion-card:hover .icon-container {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%) !important;
+  
+  i {
+    color: white !important;
+  }
+}
+
+.hover-shadow {
+  transition: box-shadow 0.3s ease;
+}
+
+.transition-all {
+  transition: all 0.3s ease;
+}
+
+// Estados de loading y error
+.no-menus-message {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  margin: 20px;
+  padding: 40px;
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .header-bienvenida {
+    text-align: center;
+    
+    .d-flex {
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .text-end {
+      text-align: center !important;
+    }
+  }
+  
+  .icon-circle {
+    width: 60px;
+    height: 60px;
+    
+    i {
+      font-size: 1.5rem !important;
+    }
+  }
+
+  .menu-title {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  .opcion-card {
+    margin-bottom: 1rem;
+  }
+}
+
+// Animaciones suaves
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.menu-section {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.opcion-card {
+  animation: fadeIn 0.6s ease-out;
+}

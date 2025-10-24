@@ -1,0 +1,101 @@
+<div class="container-fluid vh-100 bg-light">
+  <div class="row h-100 justify-content-center align-items-center">
+    <div class="col-md-5 col-lg-4">
+      <div class="card shadow-lg border-0">
+        
+        <!-- Header -->
+        <div class="card-header bg-primary text-white text-center py-4">
+          <i class="fas fa-tools fa-3x mb-3"></i>
+          <h2 class="mb-1">Ferretería 3044</h2>
+          <small class="opacity-75">ingrese sus crecdenciales</small>
+        </div>
+        <hr>
+        <!-- Body -->
+        <div class="card-body p-4">
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+            
+            <!-- Email -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">
+                <i class="fas fa-envelope me-2"></i>Correo Electrónico
+              </label>
+              <hr>
+              <input 
+                type="email" 
+                class="form-control form-control-lg" 
+                formControlName="correo"
+                placeholder="usuario@ferreteria.com"
+                [class.is-invalid]="hasError('correo', 'required') || hasError('correo', 'email')"
+                [class.is-valid]="correo?.valid">
+              
+              <div class="invalid-feedback" *ngIf="hasError('correo', 'required')">
+                <i class="fas fa-exclamation-circle me-1"></i>El correo es requerido
+              </div>
+              <div class="invalid-feedback" *ngIf="hasError('correo', 'email')">
+                <i class="fas fa-exclamation-circle me-1"></i>Formato de correo inválido
+              </div>
+            </div>
+<hr>
+            <!-- Password -->
+            <div class="mb-4">
+              <label class="form-label fw-semibold">
+                <i class="fas fa-lock me-2"></i>Contraseña
+              </label>
+              <div class="input-group">
+                <input 
+                  [type]="showPassword ? 'text' : 'password'" 
+                  class="form-control form-control-lg" 
+                  formControlName="contrasenia"
+                  placeholder="••••••"
+                  [class.is-invalid]="hasError('contrasenia', 'required') || hasError('contrasenia', 'minlength')"
+                  [class.is-valid]="contrasenia?.valid">
+                <button class="btn btn-outline-secondary" type="button" (click)="togglePassword()">
+                  <i class="fas" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword"></i>
+                </button>
+              </div>
+              
+              <div class="invalid-feedback" *ngIf="hasError('contrasenia', 'required')">
+                <i class="fas fa-exclamation-circle me-1"></i>La contraseña es requerida
+              </div>
+              <div class="invalid-feedback" *ngIf="hasError('contrasenia', 'minlength')">
+                <i class="fas fa-exclamation-circle me-1"></i>Mínimo 4 caracteres
+              </div>
+            </div>
+
+            <!-- Error Message -->
+            <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+              <i class="fas fa-exclamation-triangle me-2"></i>
+              <strong>Error:</strong> {{ errorMessage }}
+              <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
+            </div>
+
+            <!-- Submit Button -->
+            <button 
+              type="submit" 
+              class="btn btn-primary btn-lg w-100 py-3"
+              [disabled]="loginForm.invalid || loading">
+              <hr>
+              <span *ngIf="!loading">
+                <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+              </span>
+              <span *ngIf="loading">
+                <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                Verificando...
+              </span>
+            </button>
+
+          </form>
+        </div>
+<hr>
+        <!-- Footer -->
+        <div class="card-footer text-center text-muted py-3">
+          <small>
+            <i class="fas fa-info-circle me-1"></i>
+            Sistema desarrollado para gestión de ferretería
+          </small>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

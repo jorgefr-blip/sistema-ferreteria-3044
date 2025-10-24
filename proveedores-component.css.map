@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/proveedores-component/proveedores-component.scss"],
+  "sourcesContent": ["/* proveedores-component.scss */\r\n:host {\r\n  display: block;\r\n}\r\n\r\n.proveedor-avatar {\r\n  width: 40px;\r\n  height: 40px;\r\n  font-size: 0.9rem;\r\n}\r\n\r\n.empty-state {\r\n  padding: 3rem 1rem;\r\n}\r\n\r\n.badge {\r\n  font-size: 0.75rem;\r\n  padding: 0.35em 0.65em;\r\n  \r\n  &.bg-success {\r\n    background-color: #198754 !important;\r\n  }\r\n  \r\n  &.bg-secondary {\r\n    background-color: #6c757d !important;\r\n  }\r\n  \r\n  &.bg-warning {\r\n    background-color: #ffc107 !important;\r\n    color: #000;\r\n  }\r\n}\r\n\r\n.table-responsive {\r\n  overflow-x: auto;\r\n}\r\n\r\n.btn-group-sm .btn {\r\n  padding: 0.25rem 0.5rem;\r\n  font-size: 0.75rem;\r\n}\r\n\r\n.text-truncate {\r\n  overflow: hidden;\r\n  text-overflow: ellipsis;\r\n  white-space: nowrap;\r\n}"],
+  "mappings": ";AACA;AACE,WAAA;;AAGF,CAAA;AACE,SAAA;AACA,UAAA;AACA,aAAA;;AAGF,CAAA;AACE,WAAA,KAAA;;AAGF,CAAA;AACE,aAAA;AACA,WAAA,OAAA;;AAEA,CAJF,KAIE,CAAA;AACE,oBAAA;;AAGF,CARF,KAQE,CAAA;AACE,oBAAA;;AAGF,CAZF,KAYE,CAAA;AACE,oBAAA;AACA,SAAA;;AAIJ,CAAA;AACE,cAAA;;AAGF,CAAA,aAAA,CAAA;AACE,WAAA,QAAA;AACA,aAAA;;AAGF,CAAA;AACE,YAAA;AACA,iBAAA;AACA,eAAA;;",
+  "names": []
+}

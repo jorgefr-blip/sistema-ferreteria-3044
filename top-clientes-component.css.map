@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/top-clientes-component/top-clientes-component.scss"],
+  "sourcesContent": ["// Agrega esto al archivo existente\r\n.top-clientes-special {\r\n  .cliente-destacado {\r\n    border-left: 4px solid #f39c12;\r\n    background: linear-gradient(135deg, #fffaf0 0%, #fef9e7 100%);\r\n  }\r\n  \r\n  .medalla-oro {\r\n    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);\r\n    color: #000;\r\n  }\r\n  \r\n  .medalla-plata {\r\n    background: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%);\r\n    color: #000;\r\n  }\r\n  \r\n  .medalla-bronce {\r\n    background: linear-gradient(135deg, #cd7f32 0%, #e3964a 100%);\r\n    color: #000;\r\n  }\r\n}"],
+  "mappings": ";AAEE,CAAA,qBAAA,CAAA;AACE,eAAA,IAAA,MAAA;AACA;IAAA;MAAA,MAAA;MAAA,QAAA,EAAA;MAAA,QAAA;;AAGF,CALA,qBAKA,CAAA;AACE;IAAA;MAAA,MAAA;MAAA,QAAA,EAAA;MAAA,QAAA;AACA,SAAA;;AAGF,CAVA,qBAUA,CAAA;AACE;IAAA;MAAA,MAAA;MAAA,QAAA,EAAA;MAAA,QAAA;AACA,SAAA;;AAGF,CAfA,qBAeA,CAAA;AACE;IAAA;MAAA,MAAA;MAAA,QAAA,EAAA;MAAA,QAAA;AACA,SAAA;;",
+  "names": []
+}

@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/top-vendedores-component/top-vendedores-component.scss"],
+  "sourcesContent": ["// Agrega esto al archivo existente\r\n.top-vendedores-special {\r\n  .vendedor-estrella {\r\n    background: linear-gradient(135deg, #fffaf0 0%, #fef9e7 100%);\r\n    border: 2px solid #f39c12;\r\n  }\r\n  \r\n  .estrellas {\r\n    color: #f39c12;\r\n    font-size: 1.2rem;\r\n  }\r\n  \r\n  .performance-alto {\r\n    border-left: 4px solid #27ae60;\r\n  }\r\n  \r\n  .performance-medio {\r\n    border-left: 4px solid #f39c12;\r\n  }\r\n}"],
+  "mappings": ";AAEE,CAAA,uBAAA,CAAA;AACE;IAAA;MAAA,MAAA;MAAA,QAAA,EAAA;MAAA,QAAA;AACA,UAAA,IAAA,MAAA;;AAGF,CALA,uBAKA,CAAA;AACE,SAAA;AACA,aAAA;;AAGF,CAVA,uBAUA,CAAA;AACE,eAAA,IAAA,MAAA;;AAGF,CAdA,uBAcA,CAAA;AACE,eAAA,IAAA,MAAA;;",
+  "names": []
+}
